@@ -39,10 +39,10 @@ pipeline {
                             npm test
                         '''
                     }
-                }
-                post {
-                    always {
-                        junit 'jest-results/junit.xml'
+                    post {
+                        always {
+                            junit 'jest-results/junit.xml'
+                        }
                     }
                 }
                 stage('E2E') {
@@ -61,11 +61,11 @@ pipeline {
                             npx playwright test --reporter=html
                         '''
                     }
-                }
-                post {
-                    always {
-                        publishHTML([allowMissing: false, alwaysLinkToLastBuild: false, keepAll: false, reportDir: 'playwright-report', reportFiles: 'index.html', reportName: 'Playwright html report', reportTitles: '', useWrapperFileDirectly: true])
-                    }
+                    post {
+                        always {
+                            publishHTML([allowMissing: false, alwaysLinkToLastBuild: false, keepAll: false, reportDir: 'playwright-report', reportFiles: 'index.html', reportName: 'Playwright html report', reportTitles: '', useWrapperFileDirectly: true])
+                        }
+                    }                    
                 }                
             }
         }
