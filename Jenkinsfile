@@ -15,6 +15,7 @@ pipeline {
             steps {
                 echo "Building Jenkins App"
                 sh '''
+                    echo "Small change added"
                     ls -ltra
                     node --version
                     npm --version
