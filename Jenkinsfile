@@ -49,7 +49,7 @@ pipeline {
                         }
                     }
                 }
-                stage('E2E') {
+                stage('E2E-Local') {
                     agent {
                         docker {
                             image 'mcr.microsoft.com/playwright:v1.39.0-jammy'
@@ -57,7 +57,7 @@ pipeline {
                         }
                     }
                     steps {
-                        echo "E2E Test stage"
+                        echo "E2E-Local Test stage"
                         sh '''
                             npm install serve
                             node_modules/.bin/serve -s build &
@@ -67,7 +67,7 @@ pipeline {
                     }
                     post {
                         always {
-                            publishHTML([allowMissing: false, alwaysLinkToLastBuild: false, keepAll: false, reportDir: 'playwright-report', reportFiles: 'index.html', reportName: 'Playwright html report', reportTitles: '', useWrapperFileDirectly: true])
+                            publishHTML([allowMissing: false, alwaysLinkToLastBuild: false, keepAll: false, reportDir: 'playwright-report', reportFiles: 'index.html', reportName: 'Playwright html report-Local', reportTitles: '', useWrapperFileDirectly: true])
                         }
                     }                    
                 }                
@@ -91,5 +91,27 @@ pipeline {
                 '''
             }
         }
+        stage('E2E-Production') {
+            agent {
+                docker {
+                    image 'mcr.microsoft.com/playwright:v1.39.0-jammy'
+                    reuseNode true
+                }
+            }
+            environment {
+                CI_ENVIRONMENT_URL = 'https://merry-pie-15b3fa.netlify.app'
+            }                        
+            steps {
+                echo "E2E-Production Test stage"
+                sh '''
+                npx playwright test --reporter=html
+                '''
+            }
+            post {
+                always {
+                    publishHTML([allowMissing: false, alwaysLinkToLastBuild: false, keepAll: false, reportDir: 'playwright-report', reportFiles: 'index.html', reportName: 'Playwright html report-Production', reportTitles: '', useWrapperFileDirectly: true])
+                }
+            }            
+        }    
     }
 }
