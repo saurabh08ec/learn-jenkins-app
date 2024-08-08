@@ -91,7 +91,7 @@ pipeline {
                 '''
             }
         }
-        stage('E2E-Production') {
+        stage('E2E-Production-stage') {
             agent {
                 docker {
                     image 'mcr.microsoft.com/playwright:v1.39.0-jammy'
