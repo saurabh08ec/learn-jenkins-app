@@ -91,7 +91,7 @@ pipeline {
                 sed 's/"//g' deploy-stage.json > temp.txt && cat temp.txt > deploy-stage.json
                 '''
             script {
-                    env.mystagingsite = sh(script: "grep 'deploy_url' test.txt |cut -d: -f2,3|cut -d , -f 1|sed 's/ //g'", returnStdout: true)
+                    env.mystagingsite = sh(script: "grep 'deploy_url' deploy-stage.json |cut -d: -f2,3|cut -d , -f 1|sed 's/ //g'", returnStdout: true)
                 } 
                 echo "Staging URL is ${env.my-site}"
             }
