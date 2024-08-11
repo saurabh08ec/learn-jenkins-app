@@ -50,18 +50,22 @@ pipeline {
                         }
                     }
                 }
+                stage('Docker') {
+                    sh '''
+                    docker build . -t advance-playwright
+                    '''
+                }
                 stage('E2E-Local') {
                     agent {
                         docker {
-                            image 'mcr.microsoft.com/playwright:v1.39.0-jammy'
+                            image 'advance-playwright'
                             reuseNode true
                         }
                     }
                     steps {
                         echo "E2E-Local Test stage"
                         sh '''
-                            npm install serve
-                            node_modules/.bin/serve -s build &
+                            serve -s build &
                             sleep 20
                             npx playwright test --reporter=html
                         '''
@@ -100,7 +104,7 @@ pipeline {
         stage('E2E-Test-on-staging') {
             agent {
                 docker {
-                    image 'mcr.microsoft.com/playwright:v1.39.0-jammy'
+                    image 'advance-playwright'
                     reuseNode true
                 }
             }
