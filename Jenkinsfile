@@ -90,9 +90,9 @@ pipeline {
                 node_modules/.bin/netlify deploy --dir=build --json > deploy-stage.json
                 '''
                 script {
-                my-site = sh(script: 'node_modules/.bin/node-jq -r '.deploy_url' deploy-stage.json', returnStdout: true)
+                    env.my-site = sh(script: 'node_modules/.bin/node-jq -r '.deploy_url' deploy-stage.json', returnStdout: true)
                 } 
-                echo "Staging URL is ${my-site}"
+                echo "Staging URL is ${env.my-site}"
             }
         }        
         stage('Approval') {
