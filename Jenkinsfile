@@ -93,7 +93,7 @@ pipeline {
             script {
                     env.mystagingsite = sh(script: "grep 'deploy_url' deploy-stage.json |cut -d: -f2,3|cut -d , -f 1|sed 's/ //g'", returnStdout: true)
                 } 
-                echo "Staging URL is ${env.my-site}"
+                echo "Staging URL is ${env.mystagingsite}"
             }
         }
         stage('E2E-Test-on-staging') {
@@ -104,7 +104,7 @@ pipeline {
                 }
             }
             environment {
-                CI_ENVIRONMENT_URL = "${env.my-site}"
+                CI_ENVIRONMENT_URL = "${env.mystagingsite}"
             }                        
             steps {
                 echo "E2E-Production Test stage"
