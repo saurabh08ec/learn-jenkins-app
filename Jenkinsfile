@@ -88,8 +88,11 @@ pipeline {
                 echo "Deploying to staging, Site id - $NETLIFY_SITE_ID is deployed"
                 node_modules/.bin/netlify status
                 node_modules/.bin/netlify deploy --dir=build --json > deploy-stage.json
-                node_modules/.bin/node-jq -r '.deploy_url' deploy-stage.json
                 '''
+                script {
+                my-site = sh(script: 'node_modules/.bin/node-jq -r '.deploy_url' deploy-stage.json', returnStdout: true)
+                } 
+                echo "Staging URL is ${my-site}"
             }
         }        
         stage('Approval') {
