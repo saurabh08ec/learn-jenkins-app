@@ -90,11 +90,33 @@ pipeline {
                 node_modules/.bin/netlify deploy --dir=build --json > deploy-stage.json
                 '''
             script {
-                    env.mysite = sh(script: "node_modules/.bin/node-jq -r '.deploy_url' deploy-stage.json", returnStdout: true)
+                    env.mystagingsite = sh(script: "node_modules/.bin/node-jq -r '.deploy_url' deploy-stage.json", returnStdout: true)
                 } 
                 echo "Staging URL is ${env.my-site}"
             }
-        }        
+        }
+        stage('E2E-Test-on-staging') {
+            agent {
+                docker {
+                    image 'mcr.microsoft.com/playwright:v1.39.0-jammy'
+                    reuseNode true
+                }
+            }
+            environment {
+                CI_ENVIRONMENT_URL = "${env.my-site}"
+            }                        
+            steps {
+                echo "E2E-Production Test stage"
+                sh '''
+                npx playwright test --reporter=html
+                '''
+            }
+            post {
+                always {
+                    publishHTML([allowMissing: false, alwaysLinkToLastBuild: false, keepAll: false, reportDir: 'playwright-report', reportFiles: 'index.html', reportName: 'Playwright html report-Production', reportTitles: '', useWrapperFileDirectly: true])
+                }
+            }            
+        }                
         stage('Approval') {
             steps {
                 timeout(1) {
@@ -119,28 +141,6 @@ pipeline {
                 node_modules/.bin/netlify deploy --dir=build --prod
                 '''
             }
-        }
-        stage('E2E-Production-stage') {
-            agent {
-                docker {
-                    image 'mcr.microsoft.com/playwright:v1.39.0-jammy'
-                    reuseNode true
-                }
-            }
-            environment {
-                CI_ENVIRONMENT_URL = 'https://merry-pie-15b3fa.netlify.app'
-            }                        
-            steps {
-                echo "E2E-Production Test stage"
-                sh '''
-                npx playwright test --reporter=html
-                '''
-            }
-            post {
-                always {
-                    publishHTML([allowMissing: false, alwaysLinkToLastBuild: false, keepAll: false, reportDir: 'playwright-report', reportFiles: 'index.html', reportName: 'Playwright html report-Production', reportTitles: '', useWrapperFileDirectly: true])
-                }
-            }            
         }    
     }
 }
