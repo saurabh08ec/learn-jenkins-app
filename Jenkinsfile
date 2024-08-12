@@ -32,6 +32,7 @@ pipeline {
             {
                 sh '''
                     docker build . -t advance-playwright
+                    docker build -t "advance-playwright-2" -f Dockerfilenew .
                 '''
             }
         }            
@@ -104,16 +105,7 @@ pipeline {
                 } 
                 echo "Staging URL is ${env.mystagingsite}"
             }
-        }
-        stage('Docker') 
-        {
-            steps
-            {
-                sh '''
-                    docker build -t "advance-playwright-2" -f Dockerfilenew .
-                '''
-            }
-        }        
+        }   
         stage('E2E-Test-on-staging') {
             agent {
                 docker {
