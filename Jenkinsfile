@@ -28,9 +28,11 @@ pipeline {
         }
         stage('Docker') 
         {
-            sh '''
-                docker build . -t advance-playwright
-            '''
+            step {
+                sh '''
+                    docker build . -t advance-playwright
+                '''
+            }
         }            
         stage ('testing')
         {
