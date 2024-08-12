@@ -105,10 +105,19 @@ pipeline {
                 echo "Staging URL is ${env.mystagingsite}"
             }
         }
+        stage('Docker') 
+        {
+            steps
+            {
+                sh '''
+                    docker build -t "advance-playwright-2" -f Dockerfilenew .
+                '''
+            }
+        }        
         stage('E2E-Test-on-staging') {
             agent {
                 docker {
-                    image 'advance-playwright'
+                    image 'advance-playwright-2'
                     reuseNode true
                 }
             }
