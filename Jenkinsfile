@@ -127,14 +127,7 @@ pipeline {
                     publishHTML([allowMissing: false, alwaysLinkToLastBuild: false, keepAll: false, reportDir: 'playwright-report', reportFiles: 'index.html', reportName: 'Playwright html report-Production', reportTitles: '', useWrapperFileDirectly: true])
                 }
             }            
-        }                
-        stage('Approval') {
-            steps {
-                timeout(1) {
-                    input message: 'Do you wish to deploy to production?', ok: 'Yes, I am sure!'
-                }
-            }
-        }        
+        }                       
         stage('Deploy-Production') {
             agent {
                 docker {
