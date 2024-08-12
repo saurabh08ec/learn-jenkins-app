@@ -93,7 +93,7 @@ pipeline {
             steps {
                 echo "Deployment stage"
                 sh '''
-                npm install netlify-cli node-jq
+                yarn add netlify-cli node-jq
                 node_modules/.bin/netlify --version
                 echo "Deploying to staging, Site id - $NETLIFY_SITE_ID is deployed"
                 node_modules/.bin/netlify status
@@ -109,7 +109,7 @@ pipeline {
         stage('E2E-Test-on-staging') {
             agent {
                 docker {
-                    image 'advance-playwright-2'
+                    image 'advance-playwright'
                     reuseNode true
                 }
             }
@@ -145,7 +145,7 @@ pipeline {
             steps {
                 echo "Deployment stage"
                 sh '''
-                npm install netlify-cli node-jq
+                npm install netlify-cli
                 node_modules/.bin/netlify --version
                 echo "Deploying to Production, Site id - $NETLIFY_SITE_ID is deployed"
                 node_modules/.bin/netlify status
