@@ -26,6 +26,12 @@ pipeline {
                 '''
             }
         }
+        stage('Docker') 
+        {
+            sh '''
+                docker build . -t advance-playwright
+            '''
+        }            
         stage ('testing')
         {
             parallel ('All test')
@@ -49,11 +55,6 @@ pipeline {
                             junit 'jest-results/junit.xml'
                         }
                     }
-                }
-                stage('Docker') {
-                    sh '''
-                    docker build . -t advance-playwright
-                    '''
                 }
                 stage('E2E-Local') {
                     agent {
