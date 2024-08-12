@@ -2,7 +2,7 @@ pipeline {
     agent any
     environment {
         NETLIFY_SITE_ID = '6f8f71ad-d286-48b5-b7b6-0be561c76f19'
-        NETLIFY_AUTH_TOKEN = 'nfp_GNYQXdngbumW2aqhxz2AjzVEf4uooorTc172'
+        NETLIFY_AUTH_TOKEN = 'nfp_u1bU4HMBt4x8voiLjyHxW3q9qaE5pGz99bca'
         REACT_APP_VERSION = "1.0.${BUILD_ID}"
     }
     stages {
