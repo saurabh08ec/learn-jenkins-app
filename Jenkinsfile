@@ -28,7 +28,8 @@ pipeline {
         }
         stage('Docker') 
         {
-            step {
+            steps
+            {
                 sh '''
                     docker build . -t advance-playwright
                 '''
