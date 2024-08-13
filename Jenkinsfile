@@ -98,9 +98,10 @@ pipeline {
                 echo "Deploying to staging, Site id - $NETLIFY_SITE_ID is deployed"
                 node_modules/.bin/netlify status
                 node_modules/.bin/netlify deploy --dir=build --json > deploy-stage.json
+                sed 's/"//g' deploy-stage.json > temp.txt
                 '''
             script {
-                    env.mystagingsite = sh(script: "grep 'deploy_url' deploy-stage.json |cut -d: -f2,3|cut -d , -f 1|sed 's/ //g'", returnStdout: true)
+                    env.mystagingsite = sh(script: "grep 'deploy_url' temp.txt |cut -d: -f2,3|cut -d , -f 1|sed 's/ //g'", returnStdout: true)
                 } 
                 echo "Staging URL is ${env.mystagingsite}"
             }
